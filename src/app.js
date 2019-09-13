@@ -4,28 +4,40 @@ const renderContacts = () => {
     
     const contacts = JSON.parse(storage.getItem('contacts'))
   
-    let div = document.querySelector('.contact-list')
+    let div = document.querySelector('#contact-list')
   
     if (contacts) {
       div.innerHTML = ''
   
-      const ul = document.createElement('ul')
+      const ul = document.createElement('div')
   
       contacts.forEach(contact => {
-        let li = document.createElement('li')
+        let li = document.createElement('div')
         li.innerHTML = `
-          <div class="card">
-            <div class="image">
-              <img src="https://ca-address-book.herokuapp.com/images/pine.jpg" />
-            </div>
-            <div class="content">
-              <h1>${ contact.name }</h1>
-              <h2>${ contact.company }</h2>
-              <p>${ contact.notes }</p> 
-              ${ contact.email } | 
-              <a href="https://www.twitter.com/${ contact.twitter}">@${contact.twitter}</a>
-            </div>
+        <div class="ui card" id="profile-div">
+          <div class="image">
+            <img src="https://semantic-ui.com/images/avatar/large/daniel.jpg" class="visible content">
           </div>
+          <div class="content">
+              <div> <i class="users icon"></i>${ contact.name }</div>
+
+              <div> <i class="suitcase icon"></i>${ contact.company }</div>
+              <div>
+              <i class="phone square icon"></i>${ contact.phone }
+            </div>
+            <div>
+            <i class="twitter square icon"></i>
+              <a href="https://www.twitter.com/">${contact.twitter}</a>
+              </div>
+              
+              <div>
+              <i class="envelope open icon"></i>${ contact.email }</div>
+              
+              <div class="description"> ${ contact.notes }</div>
+            </div>
+            <button onClick="var c = JSON.parse(localStorage.getItem('contacts')); c.forEach((item, index, array) => item.id === ${contact.id} && array.splice(index, 1) ); localStorage.setItem('contacts', JSON.stringify(c)); window.location.reload()" class="delete-this-contact" class="ui black basic button">Delete this contact</button>
+          
+        </div>
        `
         ul.appendChild(li)
       })
@@ -63,14 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
         notes: notes.value,
         twitter: twitter.value,
       }
+      
   
       console.log(`Saving the following contact: ${JSON.stringify(contact)}`)
-      addContactForm.reset()
       let contacts = JSON.parse(storage.getItem('contacts')) || []
       contacts.push(contact)
-       storage.setItem('contacts',JSON.stringify(contacts))
-       
-       
-       renderContacts()
+      storage.setItem('contacts', JSON.stringify(contacts))
+      renderContacts()
+      addContactForm.reset()
     })
   })
+
+
+  /*
+   var storedNames = JSON.parse(localStorage.getItem("contacts"));
+       var indexToRemove = 1;
+       storedNames.slice(indexToRemove, 1);
+       localStorage.setItem('contacts', JSON.stringify(storedNames));
+       
+  */
